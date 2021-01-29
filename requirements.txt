@@ -1,0 +1,4 @@
+cassiopeia
+requests
+Pillow
+pynput
