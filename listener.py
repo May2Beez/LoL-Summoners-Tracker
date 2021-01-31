@@ -1,6 +1,5 @@
 from pynput import *
 from pynput.keyboard import *
-import threading
 import tracker as track
 import time
 

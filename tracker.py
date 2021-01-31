@@ -10,11 +10,13 @@ import threading
 import time
 from functools import partial
 from listener import *
+import popupinfo
 
 
 class Tracker:
     def __init__(self, enemyTeam, summoner, nicknameWindow):
-        global team, exit, nickWindow, summ
+        global team, exit, nickWindow, summ, lastCounter
+        lastCounter = -1
         exit = False
         summ = summoner
         nickWindow = nicknameWindow
@@ -60,16 +62,20 @@ def enemyTeamList():
         canvaTop.create_image((72 * i + 36), 36, image=nickWindow.image[i])
 
 
-def summonerCounter(button, cooldown, x, y):
+def summonerCounter(button, cooldown, x, y, champion, spell):
     buttonFont = Font(family='Helvetice', size=12, weight='bold')
     button['state'] = 'disabled'
     cd = Label(canvaBot, text=str(cooldown[0]), fg="white", bg="black", font=buttonFont)
     cd.place(x=x, y=y)
-    timer = threading.Thread(target=timerCounter, args=(button, cd, cooldown[0]))
+    timer = threading.Thread(target=timerCounter, args=(button, cd, cooldown[0], champion, spell))
     timer.start()
 
 
-def timerCounter(button, label, cooldown):
+def infoOnTop(summonersWindow, champion, spell):
+    popupinfo.popupInfo(summonersWindow, champion, spell)
+
+
+def timerCounter(button, label, cooldown, champion, spell):
     if cooldown == 0:
         cooldown = 300
     for i in range(cooldown, -1, -1):
@@ -79,6 +85,8 @@ def timerCounter(button, label, cooldown):
         time.sleep(1)
     button['state'] = 'normal'
     label['text'] = ''
+    t = threading.Thread(target=infoOnTop, args=(summonersWindow, champion, spell))
+    t.start()
 
 
 def enemySummonerList():
@@ -106,7 +114,9 @@ def enemySummonerList():
                                      buttonD,
                                      newParticipantsList[i].summoner_spell_d.cooldowns,
                                      j*36,
-                                     36)
+                                     36,
+                                     newParticipantsList[i].champion,
+                                     newParticipantsList[i].summoner_spell_d.name)
         buttonD.place(x=j * 36, y=0)
         j += 1
         image = requests.get(newParticipantsList[i].summoner_spell_f.image.url)
@@ -124,6 +134,8 @@ def enemySummonerList():
                                      buttonF,
                                      newParticipantsList[i].summoner_spell_f.cooldowns,
                                      j*36,
-                                     36)
+                                     36,
+                                     newParticipantsList[i].champion,
+                                     newParticipantsList[i].summoner_spell_f.name)
         buttonF.place(x=j * 36, y=0)
         j += 1
