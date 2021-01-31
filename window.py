@@ -11,7 +11,6 @@ class Window:
     def __init__(self):
         global nicknameWindow
         nicknameWindow = Tk()
-        nicknameWindow.iconphoto(self, PhotoImage(file="images/icon.png"))
         init()
         labelAboutPlayer()
         inputField()
