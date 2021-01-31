@@ -32,6 +32,7 @@ def noweOkno():
     global canvaTop, canvaBot, summonersWindow
     summonersWindow = Toplevel(nickWindow)
     summonersWindow.withdraw()
+    popupinfo.popupInfo(summonersWindow)
     screen_height = summonersWindow.winfo_screenheight()
     summonersWindow.geometry("360x128+200+" + str(int(screen_height - 128)))
     summonersWindow.attributes("-topmost", True)
@@ -71,8 +72,8 @@ def summonerCounter(button, cooldown, x, y, champion, spell):
     timer.start()
 
 
-def infoOnTop(summonersWindow, champion, spell):
-    popupinfo.popupInfo(summonersWindow, champion, spell)
+def infoOnTop(champion, spell):
+    popupinfo.showNotificiation(champion, spell)
 
 
 def timerCounter(button, label, cooldown, champion, spell):
@@ -85,7 +86,7 @@ def timerCounter(button, label, cooldown, champion, spell):
         time.sleep(1)
     button['state'] = 'normal'
     label['text'] = ''
-    t = threading.Thread(target=infoOnTop, args=(summonersWindow, champion, spell))
+    t = threading.Thread(target=infoOnTop, args=(champion, spell))
     t.start()
 
 

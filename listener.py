@@ -2,6 +2,7 @@ from pynput import *
 from pynput.keyboard import *
 import tracker as track
 import time
+import popupinfo as ppi
 
 
 class Listening:
@@ -21,6 +22,9 @@ def exitProgram():
     time.sleep(1.1)
     summWindow.destroy()
     nickWindow.deiconify()
+    ppi.toast.destroy()
+    h.stop()
+    listener.stop()
 
 
 def on_press(key):
